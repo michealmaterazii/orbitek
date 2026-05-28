@@ -1,10 +1,9 @@
-import { Wifi, Phone, Heart, ThumbsUp, Youtube, Music } from "lucide-react";
-
+import { Wifi, Phone, Heart, ThumbsUp, Play, Music } from "lucide-react";
 const services = [
   { title: "Instagram Followers", desc: "Real-looking followers delivered instantly. Boost your credibility.", icon: Heart },
   { title: "TikTok Views", desc: "Explode your reach and go viral with thousands of views.", icon: Music },
   { title: "Google Voice Numbers", desc: "US-based numbers for verification and business use.", icon: Phone },
-  { title: "YouTube Subscribers", desc: "Grow your channel with genuine-looking subscribers.", icon: Youtube },
+  { title: "YouTube Subscribers", desc: "Grow your channel with genuine-looking subscribers.", icon: Play },
   { title: "Instagram Likes", desc: "Get likes on any post quickly and affordably.", icon: Heart },
   { title: "Facebook Page Likes", desc: "Build social proof for your Facebook business page.", icon: ThumbsUp },
 ];
