@@ -4,15 +4,15 @@ import { supabase } from "../../lib/supabase";
 import {
   PlusCircle, List, RefreshCw, DollarSign,
   Ticket, Grid, LogOut, Menu, X,
-  Instagram, Music, Youtube, Facebook,
+  Camera, Music, Play, ThumbsUp,
   Twitter, Phone, Send, Wifi
 } from "lucide-react";
 
 const services = [
-  { name: "Instagram", icon: Instagram, color: "#E1306C" },
+  { name: "Instagram", icon: Camera, color: "#E1306C" },
   { name: "TikTok", icon: Music, color: "#00F2EA" },
-  { name: "YouTube", icon: Youtube, color: "#FF0000" },
-  { name: "Facebook", icon: Facebook, color: "#1877F2" },
+  { name: "YouTube", icon: Play, color: "#FF0000" },
+  { name: "Facebook", icon: ThumbsUp, color: "#1877F2" },
   { name: "Twitter / X", icon: Twitter, color: "#1DA1F2" },
   { name: "Telegram", icon: Send, color: "#2AABEE" },
   { name: "Google Voice", icon: Phone, color: "#00FF88" },
@@ -20,12 +20,12 @@ const services = [
 ];
 
 const navItems = [
-  { label: "New Order", icon: PlusCircle, href: "/dashboard" },
-  { label: "My Orders", icon: List, href: "/dashboard/orders" },
-  { label: "Refill", icon: RefreshCw, href: "/dashboard/refill" },
-  { label: "Add Funds", icon: DollarSign, href: "/dashboard/funds" },
-  { label: "Tickets", icon: Ticket, href: "/dashboard/tickets" },
-  { label: "Services", icon: Grid, href: "/dashboard/services" },
+  { label: "New Order", icon: PlusCircle },
+  { label: "My Orders", icon: List },
+  { label: "Refill", icon: RefreshCw },
+  { label: "Add Funds", icon: DollarSign },
+  { label: "Tickets", icon: Ticket },
+  { label: "Services", icon: Grid },
 ];
 
 export default function Dashboard() {
@@ -119,7 +119,6 @@ export default function Dashboard() {
                 <div className="text-xs tracking-widest mb-2" style={{ color: 'rgba(0,255,255,0.6)' }}>◈ PLACE AN ORDER ◈</div>
                 <h2 className="text-2xl font-black tracking-widest" style={{ fontFamily: "'Orbitron', sans-serif" }}>CHOOSE A NETWORK</h2>
               </div>
-
               <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: 'rgba(0,255,255,0.08)' }}>
                 {services.map((service) => {
                   const Icon = service.icon;
