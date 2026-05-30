@@ -5,175 +5,27 @@ import {
   PlusCircle, List, RefreshCw, DollarSign,
   Ticket, LayoutGrid, LogOut, Menu, X,
   Camera, Music, Play, ThumbsUp,
-  AtSign, Phone, Send, Wifi, ChevronRight
+  AtSign, Phone, Send, Wifi, ChevronRight, Loader
 } from "lucide-react";
 
-const services = [
-  {
-    name: "Instagram", icon: Camera, color: "#E1306C", glow: "rgba(225,48,108,0.3)",
-    items: [
-      { id: 101, name: "AI Growth Package", min: 1, max: 1, price: 9.99 },
-      { id: 102, name: "Threads Likes", min: 50, max: 5000, price: 0.49 },
-      { id: 103, name: "Threads Followers", min: 100, max: 10000, price: 0.99 },
-      { id: 104, name: "Threads Shares", min: 50, max: 5000, price: 0.59 },
-      { id: 105, name: "Threads Comments", min: 10, max: 1000, price: 1.99 },
-      { id: 106, name: "TOP Services [EXCLUSIVE]", min: 100, max: 10000, price: 2.99 },
-      { id: 107, name: "Growth Monthly Package", min: 1, max: 12, price: 19.99 },
-      { id: 108, name: "NFT Services", min: 100, max: 5000, price: 1.99 },
-      { id: 109, name: "Engagement Package", min: 100, max: 5000, price: 1.49 },
-      { id: 110, name: "Likes", min: 50, max: 50000, price: 0.49 },
-      { id: 111, name: "Likes [BOTS]", min: 100, max: 100000, price: 0.19 },
-      { id: 112, name: "Likes [Targeted]", min: 50, max: 10000, price: 0.89 },
-      { id: 113, name: "Likes Per Minute", min: 50, max: 5000, price: 0.99 },
-      { id: 114, name: "POWER Likes [Latest Posts]", min: 50, max: 5000, price: 1.29 },
-      { id: 115, name: "Followers [Guaranteed]", min: 100, max: 50000, price: 1.49 },
-      { id: 116, name: "Followers [Not Guaranteed]", min: 100, max: 50000, price: 0.79 },
-      { id: 117, name: "Followers [Targeted]", min: 100, max: 10000, price: 1.99 },
-      { id: 118, name: "Engagement Services", min: 100, max: 10000, price: 1.49 },
-      { id: 119, name: "Views", min: 100, max: 100000, price: 0.29 },
-      { id: 120, name: "IGTV Views", min: 100, max: 50000, price: 0.39 },
-      { id: 121, name: "Italy Services", min: 100, max: 10000, price: 1.99 },
-      { id: 122, name: "Turkey Services", min: 100, max: 10000, price: 1.49 },
-      { id: 123, name: "Turkey Verified Services", min: 100, max: 5000, price: 2.49 },
-      { id: 124, name: "Egypt Verified Services", min: 100, max: 5000, price: 2.49 },
-      { id: 125, name: "Auto Comments", min: 10, max: 1000, price: 1.99 },
-      { id: 126, name: "Impressions", min: 100, max: 100000, price: 0.19 },
-      { id: 127, name: "Saves", min: 100, max: 50000, price: 0.39 },
-      { id: 128, name: "Reach", min: 100, max: 100000, price: 0.29 },
-    ]
-  },
-  {
-    name: "TikTok", icon: Music, color: "#00F2EA", glow: "rgba(0,242,234,0.3)",
-    items: [
-      { id: 201, name: "Views", min: 500, max: 100000, price: 0.19 },
-      { id: 202, name: "Likes", min: 100, max: 50000, price: 0.39 },
-      { id: 203, name: "Followers", min: 100, max: 10000, price: 1.29 },
-      { id: 204, name: "Followers [Country Targeted]", min: 100, max: 10000, price: 1.99 },
-      { id: 205, name: "Views [Country Targeted]", min: 500, max: 100000, price: 0.39 },
-      { id: 206, name: "Comments", min: 10, max: 1000, price: 2.49 },
-      { id: 207, name: "Live Views", min: 100, max: 10000, price: 1.49 },
-      { id: 208, name: "Live Views [ARAB]", min: 100, max: 10000, price: 1.99 },
-      { id: 209, name: "Live Likes", min: 100, max: 10000, price: 1.29 },
-      { id: 210, name: "Live Shares", min: 100, max: 5000, price: 1.49 },
-      { id: 211, name: "Live Comments", min: 10, max: 1000, price: 2.49 },
-      { id: 212, name: "Shares", min: 100, max: 10000, price: 0.79 },
-      { id: 213, name: "Saves", min: 100, max: 10000, price: 0.59 },
-      { id: 214, name: "Downloads", min: 100, max: 10000, price: 0.69 },
-      { id: 215, name: "PK Battle Points", min: 100, max: 10000, price: 1.99 },
-      { id: 216, name: "Auto Services", min: 100, max: 10000, price: 1.49 },
-    ]
-  },
-  {
-    name: "YouTube", icon: Play, color: "#FF0000", glow: "rgba(255,0,0,0.3)",
-    items: [
-      { id: 301, name: "Views", min: 500, max: 100000, price: 0.39 },
-      { id: 302, name: "Views [High Retention]", min: 500, max: 50000, price: 0.89 },
-      { id: 303, name: "Views [UNIQUE - RAV]", min: 500, max: 50000, price: 0.99 },
-      { id: 304, name: "Views [Targeted - No Drop]", min: 500, max: 50000, price: 1.29 },
-      { id: 305, name: "Views [From Ads]", min: 500, max: 50000, price: 1.49 },
-      { id: 306, name: "Views [Discovery Ads Targeted]", min: 500, max: 50000, price: 1.99 },
-      { id: 307, name: "Views [By Video Interest]", min: 500, max: 50000, price: 1.49 },
-      { id: 308, name: "Views [USA SEO]", min: 500, max: 50000, price: 1.99 },
-      { id: 309, name: "Views [USA SEO Cheap]", min: 500, max: 50000, price: 0.99 },
-      { id: 310, name: "Shorts Views", min: 1000, max: 100000, price: 0.29 },
-      { id: 311, name: "Live Stream [EXCLUSIVE]", min: 100, max: 10000, price: 2.99 },
-      { id: 312, name: "Live Stream [Concurrent Cheapest]", min: 100, max: 10000, price: 1.49 },
-      { id: 313, name: "Live Stream [Concurrent]", min: 100, max: 10000, price: 1.99 },
-      { id: 314, name: "Live Stream / Premiere", min: 100, max: 10000, price: 2.49 },
-      { id: 315, name: "Subscribers", min: 100, max: 5000, price: 1.99 },
-      { id: 316, name: "Likes", min: 100, max: 10000, price: 0.69 },
-      { id: 317, name: "Dislikes", min: 100, max: 10000, price: 0.49 },
-      { id: 318, name: "Shares", min: 100, max: 10000, price: 0.59 },
-      { id: 319, name: "Likes [Country Targeted]", min: 100, max: 10000, price: 1.29 },
-      { id: 320, name: "Watch Time Hours", min: 10, max: 500, price: 4.99 },
-      { id: 321, name: "Comments", min: 10, max: 1000, price: 2.99 },
-      { id: 322, name: "Comments & Replies [By AI]", min: 10, max: 500, price: 3.99 },
-      { id: 323, name: "Social Shares", min: 100, max: 10000, price: 0.49 },
-    ]
-  },
-  {
-    name: "Facebook", icon: ThumbsUp, color: "#1877F2", glow: "rgba(24,119,242,0.3)",
-    items: [
-      { id: 401, name: "Page Likes", min: 100, max: 10000, price: 0.89 },
-      { id: 402, name: "Page Likes [Targeted]", min: 100, max: 10000, price: 1.49 },
-      { id: 403, name: "Post Likes", min: 50, max: 10000, price: 0.49 },
-      { id: 404, name: "Post Likes [EMOJI]", min: 50, max: 5000, price: 0.59 },
-      { id: 405, name: "Post Likes [Targeted]", min: 50, max: 5000, price: 0.99 },
-      { id: 406, name: "Comments", min: 10, max: 1000, price: 2.49 },
-      { id: 407, name: "Video Views", min: 500, max: 100000, price: 0.29 },
-      { id: 408, name: "Story Views", min: 100, max: 10000, price: 0.39 },
-      { id: 409, name: "Followers", min: 100, max: 10000, price: 0.99 },
-      { id: 410, name: "Friends", min: 100, max: 5000, price: 1.49 },
-      { id: 411, name: "Group Members", min: 100, max: 10000, price: 1.29 },
-      { id: 412, name: "Rating", min: 10, max: 1000, price: 1.99 },
-      { id: 413, name: "Shares", min: 100, max: 10000, price: 0.79 },
-      { id: 414, name: "USA Services", min: 100, max: 10000, price: 2.49 },
-      { id: 415, name: "West Africa Services", min: 100, max: 10000, price: 1.99 },
-      { id: 416, name: "Brazil Services", min: 100, max: 10000, price: 1.49 },
-      { id: 417, name: "Egypt / Arab Services", min: 100, max: 10000, price: 1.49 },
-      { id: 418, name: "Italy Services", min: 100, max: 10000, price: 1.99 },
-      { id: 419, name: "Korea Services", min: 100, max: 10000, price: 1.99 },
-      { id: 420, name: "Taiwan Services", min: 100, max: 10000, price: 1.99 },
-      { id: 421, name: "Thailand Services", min: 100, max: 10000, price: 1.99 },
-      { id: 422, name: "Post Packages", min: 1, max: 10, price: 4.99 },
-      { id: 423, name: "Live Stream", min: 100, max: 10000, price: 2.99 },
-      { id: 424, name: "Live Stream [Cheap]", min: 100, max: 10000, price: 1.49 },
-      { id: 425, name: "Live Stream [Server 2]", min: 100, max: 10000, price: 1.99 },
-      { id: 426, name: "Live Stream [Always Working]", min: 100, max: 10000, price: 2.49 },
-      { id: 427, name: "Auto Live Stream 3 Days", min: 1, max: 1, price: 9.99 },
-      { id: 428, name: "Auto Live Stream 7 Days", min: 1, max: 1, price: 19.99 },
-      { id: 429, name: "Auto Live Stream 30 Days", min: 1, max: 1, price: 49.99 },
-    ]
-  },
-  {
-    name: "Twitter / X", icon: AtSign, color: "#1DA1F2", glow: "rgba(29,161,242,0.3)",
-    items: [
-      { id: 501, name: "Followers", min: 100, max: 10000, price: 1.09 },
-      { id: 502, name: "Likes", min: 50, max: 10000, price: 0.49 },
-      { id: 503, name: "Retweets", min: 50, max: 5000, price: 0.79 },
-      { id: 504, name: "Mentions", min: 50, max: 5000, price: 0.99 },
-      { id: 505, name: "NFT Services", min: 100, max: 5000, price: 2.99 },
-      { id: 506, name: "Packages", min: 1, max: 10, price: 4.99 },
-      { id: 507, name: "Poll Votes", min: 100, max: 10000, price: 0.99 },
-      { id: 508, name: "Impressions", min: 1000, max: 100000, price: 0.19 },
-      { id: 509, name: "Bookmarks", min: 100, max: 10000, price: 0.49 },
-      { id: 510, name: "Views", min: 1000, max: 100000, price: 0.19 },
-      { id: 511, name: "Live Views", min: 100, max: 10000, price: 1.99 },
-      { id: 512, name: "Comments", min: 10, max: 1000, price: 2.99 },
-      { id: 513, name: "Egypt / Arab Services", min: 100, max: 10000, price: 1.49 },
-      { id: 514, name: "Space Listeners", min: 100, max: 10000, price: 1.99 },
-    ]
-  },
-  {
-    name: "Telegram", icon: Send, color: "#2AABEE", glow: "rgba(42,171,238,0.3)",
-    items: [
-      { id: 601, name: "Members", min: 100, max: 10000, price: 0.99 },
-      { id: 602, name: "Members [Country Targeted]", min: 100, max: 10000, price: 1.49 },
-      { id: 603, name: "Reactions", min: 100, max: 10000, price: 0.49 },
-      { id: 604, name: "Comments", min: 10, max: 1000, price: 2.49 },
-      { id: 605, name: "Views", min: 500, max: 100000, price: 0.19 },
-      { id: 606, name: "Views [Country Targeted]", min: 500, max: 100000, price: 0.39 },
-      { id: 607, name: "Auto Views", min: 500, max: 100000, price: 0.29 },
-      { id: 608, name: "Shares", min: 100, max: 10000, price: 0.59 },
-      { id: 609, name: "Votes", min: 100, max: 10000, price: 0.49 },
-    ]
-  },
-  {
-    name: "Google Voice", icon: Phone, color: "#00FF88", glow: "rgba(0,255,136,0.3)",
-    items: [
-      { id: 701, name: "Google Voice Number (US)", min: 1, max: 10, price: 2.99 },
-      { id: 702, name: "Google Voice Number (UK)", min: 1, max: 10, price: 3.99 },
-    ]
-  },
-  {
-    name: "Spotify", icon: Music, color: "#1DB954", glow: "rgba(29,185,84,0.3)",
-    items: [
-      { id: 801, name: "Followers", min: 100, max: 5000, price: 1.49 },
-      { id: 802, name: "Plays", min: 1000, max: 100000, price: 0.19 },
-      { id: 803, name: "Monthly Listeners", min: 100, max: 5000, price: 1.99 },
-    ]
-  },
-];
+const MARKUP = 2.5; // 150% markup on JAP prices
+
+const networkConfig: any = {
+  "Instagram": { icon: Camera, color: "#E1306C", glow: "rgba(225,48,108,0.3)" },
+  "TikTok": { icon: Music, color: "#00F2EA", glow: "rgba(0,242,234,0.3)" },
+  "YouTube": { icon: Play, color: "#FF0000", glow: "rgba(255,0,0,0.3)" },
+  "Facebook": { icon: ThumbsUp, color: "#1877F2", glow: "rgba(24,119,242,0.3)" },
+  "Twitter": { icon: AtSign, color: "#1DA1F2", glow: "rgba(29,161,242,0.3)" },
+  "Telegram": { icon: Send, color: "#2AABEE", glow: "rgba(42,171,238,0.3)" },
+  "Google": { icon: Phone, color: "#00FF88", glow: "rgba(0,255,136,0.3)" },
+  "Spotify": { icon: Music, color: "#1DB954", glow: "rgba(29,185,84,0.3)" },
+  "Default": { icon: LayoutGrid, color: "#00ffff", glow: "rgba(0,255,255,0.3)" },
+};
+
+function getNetworkConfig(category: string) {
+  const key = Object.keys(networkConfig).find(k => category.toLowerCase().includes(k.toLowerCase()));
+  return key ? networkConfig[key] : networkConfig["Default"];
+}
 
 const navItems = [
   { label: "New Order", icon: PlusCircle },
@@ -188,11 +40,15 @@ export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [active, setActive] = useState("New Order");
+  const [networks, setNetworks] = useState<any[]>([]);
   const [selectedNetwork, setSelectedNetwork] = useState<any>(null);
   const [selectedService, setSelectedService] = useState<any>(null);
   const [orderLink, setOrderLink] = useState("");
   const [orderQty, setOrderQty] = useState(100);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState("");
+  const [servicesLoading, setServicesLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -201,9 +57,69 @@ export default function Dashboard() {
     });
   }, []);
 
+  useEffect(() => {
+    fetch("/api/services")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          // Group services by category
+          const grouped: any = {};
+          data.forEach((service: any) => {
+            const cat = service.category || "Other";
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(service);
+          });
+
+          // Convert to array and get network config
+          const networkList = Object.keys(grouped).map(cat => ({
+            name: cat,
+            ...getNetworkConfig(cat),
+            items: grouped[cat].map((s: any) => ({
+              id: s.service,
+              name: s.name,
+              min: parseInt(s.min),
+              max: parseInt(s.max),
+              price: (parseFloat(s.rate) * MARKUP).toFixed(3),
+              japRate: s.rate,
+            }))
+          }));
+
+          setNetworks(networkList);
+        }
+        setServicesLoading(false);
+      })
+      .catch(() => setServicesLoading(false));
+  }, []);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = "/";
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!orderLink || orderQty < selectedService.min) return;
+    setOrderLoading(true);
+    setOrderError("");
+    try {
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service: selectedService.id,
+          link: orderLink,
+          quantity: orderQty,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setOrderError(data.error);
+      } else {
+        setOrderPlaced(true);
+      }
+    } catch {
+      setOrderError("Something went wrong. Please try again.");
+    }
+    setOrderLoading(false);
   };
 
   if (!user) return (
@@ -295,7 +211,6 @@ export default function Dashboard() {
 
         <div className="flex-1 p-6">
 
-          {/* NEW ORDER FLOW */}
           {active === "New Order" && (
             <div>
               {!selectedNetwork ? (
@@ -304,24 +219,32 @@ export default function Dashboard() {
                     <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ SELECT PLATFORM ◈</p>
                     <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>NEW ORDER</h2>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {services.map((service) => {
-                      const Icon = service.icon;
-                      return (
-                        <button key={service.name} onClick={() => setSelectedNetwork(service)}
-                          className="flex flex-col items-center justify-center py-10 gap-4 transition-all duration-300 relative group"
-                          style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.border = `1px solid ${service.color}40`; (e.currentTarget as HTMLElement).style.background = `${service.color}08`; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}>
-                          <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ border: `1px solid ${service.color}40`, background: `${service.color}10`, boxShadow: `0 0 20px ${service.glow}` }}>
-                            <Icon size={24} style={{ color: service.color }} />
-                          </div>
-                          <p className="text-xs font-bold tracking-widest" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.7)', fontSize: '10px' }}>{service.name.toUpperCase()}</p>
-                          <div className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, ${service.color}, transparent)` }} />
-                        </button>
-                      );
-                    })}
-                  </div>
+
+                  {servicesLoading ? (
+                    <div className="flex items-center gap-3 py-20 justify-center">
+                      <Loader size={20} className="text-cyan-400 animate-spin" />
+                      <span className="text-xs tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.3em' }}>LOADING SERVICES...</span>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {networks.map((network) => {
+                        const Icon = network.icon;
+                        return (
+                          <button key={network.name} onClick={() => setSelectedNetwork(network)}
+                            className="flex flex-col items-center justify-center py-10 gap-4 transition-all duration-300 relative group"
+                            style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.border = `1px solid ${network.color}40`; (e.currentTarget as HTMLElement).style.background = `${network.color}08`; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}>
+                            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ border: `1px solid ${network.color}40`, background: `${network.color}10`, boxShadow: `0 0 20px ${network.glow}` }}>
+                              <Icon size={24} style={{ color: network.color }} />
+                            </div>
+                            <p className="text-xs font-bold tracking-widest text-center px-2" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.7)', fontSize: '9px' }}>{network.name.toUpperCase()}</p>
+                            <div className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, ${network.color}, transparent)` }} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               ) : !selectedService ? (
                 <div>
@@ -331,19 +254,19 @@ export default function Dashboard() {
                     <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ SELECT SERVICE ◈</p>
                     <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>{selectedNetwork.name.toUpperCase()}</h2>
                   </div>
-                  <div className="space-y-2 max-w-2xl">
+                  <div className="space-y-2 max-w-3xl">
                     {selectedNetwork.items.map((item: any) => (
-                      <button key={item.id} onClick={() => { setSelectedService(item); setOrderQty(item.min); setOrderPlaced(false); }}
-                        className="w-full flex items-center justify-between px-6 py-5 transition-all duration-300"
+                      <button key={item.id} onClick={() => { setSelectedService(item); setOrderQty(item.min); setOrderPlaced(false); setOrderError(""); }}
+                        className="w-full flex items-center justify-between px-6 py-5 transition-all duration-300 text-left"
                         style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.border = `1px solid ${selectedNetwork.color}40`; (e.currentTarget as HTMLElement).style.background = `${selectedNetwork.color}05`; }}
                         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}>
-                        <div className="text-left">
-                          <p className="text-xs font-bold tracking-wider mb-1" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.8)' }}>{item.name.toUpperCase()}</p>
+                        <div>
+                          <p className="text-xs font-bold tracking-wider mb-1" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.8)', fontSize: '10px' }}>{item.name.toUpperCase()}</p>
                           <p className="text-xs" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>MIN {item.min} — MAX {item.max.toLocaleString()}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", color: selectedNetwork.color, fontSize: '14px' }}>${item.price}</p>
+                        <div className="text-right shrink-0 ml-4">
+                          <p className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", color: selectedNetwork.color, fontSize: '13px' }}>${item.price}</p>
                           <p className="text-xs" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.2)' }}>PER 1000</p>
                         </div>
                       </button>
@@ -381,9 +304,15 @@ export default function Dashboard() {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-xs tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.3)' }}>TOTAL COST</span>
-                          <span className="font-black text-white" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '14px' }}>${((orderQty / 1000) * selectedService.price).toFixed(2)}</span>
+                          <span className="font-black text-white" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '14px' }}>${((orderQty / 1000) * parseFloat(selectedService.price)).toFixed(2)}</span>
                         </div>
                       </div>
+
+                      {orderError && (
+                        <div className="px-4 py-3 text-xs" style={{ border: '1px solid rgba(255,0,0,0.2)', background: 'rgba(255,0,0,0.05)', fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,100,100,0.8)', letterSpacing: '0.1em' }}>
+                          {orderError}
+                        </div>
+                      )}
 
                       <div>
                         <label className="block text-xs tracking-widest mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em' }}>LINK / USERNAME</label>
@@ -401,10 +330,10 @@ export default function Dashboard() {
                           style={{ border: '1px solid rgba(0,255,255,0.2)', fontFamily: "'Rajdhani', sans-serif" }} />
                       </div>
 
-                      <button onClick={() => { if (orderLink && orderQty >= selectedService.min) setOrderPlaced(true); }}
-                        className="w-full py-4 font-black text-xs tracking-widest transition-all hover:opacity-90"
+                      <button onClick={handlePlaceOrder} disabled={orderLoading}
+                        className="w-full py-4 font-black text-xs tracking-widest transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3"
                         style={{ fontFamily: "'Orbitron', sans-serif", background: 'linear-gradient(135deg, rgba(139,0,255,0.8), rgba(0,255,255,0.8))', boxShadow: '0 0 30px rgba(0,255,255,0.15)', letterSpacing: '0.2em' }}>
-                        PLACE ORDER
+                        {orderLoading ? <><Loader size={14} className="animate-spin" /> PROCESSING...</> : "PLACE ORDER"}
                       </button>
                     </div>
                   )}
