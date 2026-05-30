@@ -1,3 +1,4 @@
+"use client";
 import { Wifi, Phone, Heart, ThumbsUp, Play, Music, ArrowRight, CheckCircle, Zap, Shield, Clock } from "lucide-react";
 
 const services = [
@@ -28,7 +29,6 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white overflow-hidden" style={{ fontFamily: "'Orbitron', sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600&display=swap');`}</style>
 
-      {/* Grid background */}
       <div className="fixed inset-0 z-0" style={{
         backgroundImage: `linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px)`,
         backgroundSize: '60px 60px'
@@ -81,7 +81,6 @@ export default function Home() {
             Buy Instagram followers, TikTok views, YouTube subscribers, Google Voice numbers and more — instantly delivered at the cheapest prices.
           </p>
 
-          {/* Stats bar */}
           <div className="flex items-center gap-8 mb-12 flex-wrap justify-center">
             {stats.map((stat, i) => (
               <div key={i} className="text-center">
@@ -120,10 +119,8 @@ export default function Home() {
             {services.map((service, i) => {
               const Icon = service.icon;
               return (
-                <div key={i} className="p-8 group cursor-pointer transition-all duration-500 relative" style={{ background: '#010108' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = `${service.color}08`}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#010108'}>
-                  <div className="w-12 h-12 flex items-center justify-center mb-6 transition-all duration-300" style={{
+                <div key={i} className="p-8 group cursor-pointer transition-all duration-500" style={{ background: '#010108' }}>
+                  <div className="w-12 h-12 flex items-center justify-center mb-6" style={{
                     border: `1px solid ${service.color}40`,
                     boxShadow: `0 0 20px ${service.color}20`,
                     background: `${service.color}10`
