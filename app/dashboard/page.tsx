@@ -8,7 +8,7 @@ import {
   AtSign, Phone, Send, Wifi, ChevronRight, Loader
 } from "lucide-react";
 
-const MARKUP = 2.5; // 150% markup on JAP prices
+const MARKUP = 2.5;
 
 const networkConfig: any = {
   "Instagram": { icon: Camera, color: "#E1306C", glow: "rgba(225,48,108,0.3)" },
@@ -35,6 +35,77 @@ const navItems = [
   { label: "Tickets", icon: Ticket },
   { label: "Services", icon: LayoutGrid },
 ];
+
+function MyOrders({ userId }: { userId: string }) {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const { data } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+      setOrders(data || []);
+      setLoading(false);
+    };
+    fetchOrders();
+  }, [userId]);
+
+  return (
+    <div>
+      <div className="mb-10">
+        <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ TRANSACTION LOG ◈</p>
+        <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>MY ORDERS</h2>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center gap-3 py-20 justify-center">
+          <Loader size={20} className="text-cyan-400 animate-spin" />
+          <span className="text-xs tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.3em' }}>LOADING ORDERS...</span>
+        </div>
+      ) : orders.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24" style={{ border: '1px solid rgba(0,255,255,0.06)', background: 'rgba(0,255,255,0.01)' }}>
+          <List size={48} style={{ color: 'rgba(0,255,255,0.15)', marginBottom: '16px' }} />
+          <p className="text-xs tracking-widest" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.15)', letterSpacing: '0.3em' }}>NO ORDERS FOUND</p>
+        </div>
+      ) : (
+        <div className="space-y-2 max-w-4xl">
+          <div className="grid grid-cols-5 px-4 py-2 text-xs tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.25)', letterSpacing: '0.15em' }}>
+            <span>SERVICE</span>
+            <span>LINK</span>
+            <span className="text-center">QTY</span>
+            <span className="text-center">PRICE</span>
+            <span className="text-center">STATUS</span>
+          </div>
+          {orders.map((order) => (
+            <div key={order.id} className="grid grid-cols-5 px-4 py-4 items-center" style={{ border: '1px solid rgba(0,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+              <div>
+                <p className="text-xs font-bold" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.8)', fontSize: '9px' }}>{order.network}</p>
+                <p className="text-xs" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)' }}>{order.service_name}</p>
+              </div>
+              <p className="text-xs truncate pr-4" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)' }}>{order.link}</p>
+              <p className="text-xs text-center" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.6)' }}>{order.quantity?.toLocaleString()}</p>
+              <p className="text-xs text-center font-bold" style={{ fontFamily: "'Orbitron', sans-serif", color: '#00ffff', fontSize: '11px' }}>${order.price}</p>
+              <div className="flex justify-center">
+                <span className="text-xs px-2 py-1 tracking-widest" style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: '9px',
+                  border: `1px solid ${order.status === 'completed' ? 'rgba(0,255,100,0.4)' : order.status === 'pending' ? 'rgba(255,200,0,0.4)' : 'rgba(255,100,0,0.4)'}`,
+                  color: order.status === 'completed' ? 'rgba(0,255,100,0.8)' : order.status === 'pending' ? 'rgba(255,200,0,0.8)' : 'rgba(255,100,0,0.8)',
+                  background: order.status === 'completed' ? 'rgba(0,255,100,0.05)' : order.status === 'pending' ? 'rgba(255,200,0,0.05)' : 'rgba(255,100,0,0.05)',
+                }}>
+                  {order.status?.toUpperCase()}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function AddFunds() {
   const [phone, setPhone] = useState("");
@@ -157,15 +228,12 @@ export default function Dashboard() {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
-          // Group services by category
           const grouped: any = {};
           data.forEach((service: any) => {
             const cat = service.category || "Other";
             if (!grouped[cat]) grouped[cat] = [];
             grouped[cat].push(service);
           });
-
-          // Convert to array and get network config
           const networkList = Object.keys(grouped).map(cat => ({
             name: cat,
             ...getNetworkConfig(cat),
@@ -178,7 +246,6 @@ export default function Dashboard() {
               japRate: s.rate,
             }))
           }));
-
           setNetworks(networkList);
         }
         setServicesLoading(false);
@@ -203,6 +270,10 @@ export default function Dashboard() {
           service: selectedService.id,
           link: orderLink,
           quantity: orderQty,
+          price: ((orderQty / 1000) * parseFloat(selectedService.price)).toFixed(2),
+          serviceName: selectedService.name,
+          network: selectedNetwork.name,
+          userId: user.id,
         }),
       });
       const data = await res.json();
@@ -233,7 +304,6 @@ export default function Dashboard() {
         backgroundSize: '60px 60px'
       }} />
 
-      {/* Sidebar */}
       <aside className={`fixed top-0 left-0 h-full z-50 flex flex-col transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'} md:w-64 md:relative`}
         style={{ background: 'rgba(2,2,15,0.95)', borderRight: '1px solid rgba(0,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
 
@@ -275,7 +345,6 @@ export default function Dashboard() {
         </button>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 flex flex-col min-h-screen relative z-10">
         <header className="flex items-center justify-between px-6 py-4 sticky top-0 z-40"
           style={{ background: 'rgba(1,1,8,0.9)', borderBottom: '1px solid rgba(0,255,255,0.06)', backdropFilter: 'blur(20px)' }}>
@@ -314,7 +383,6 @@ export default function Dashboard() {
                     <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ SELECT PLATFORM ◈</p>
                     <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>NEW ORDER</h2>
                   </div>
-
                   {servicesLoading ? (
                     <div className="flex items-center gap-3 py-20 justify-center">
                       <Loader size={20} className="text-cyan-400 animate-spin" />
@@ -437,22 +505,8 @@ export default function Dashboard() {
             </div>
           )}
 
-          {active === "My Orders" && (
-            <div>
-              <div className="mb-10">
-                <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ TRANSACTION LOG ◈</p>
-                <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>MY ORDERS</h2>
-              </div>
-              <div className="flex flex-col items-center justify-center py-24" style={{ border: '1px solid rgba(0,255,255,0.06)', background: 'rgba(0,255,255,0.01)' }}>
-                <List size={48} style={{ color: 'rgba(0,255,255,0.15)', marginBottom: '16px' }} />
-                <p className="text-xs tracking-widest" style={{ fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,255,255,0.15)', letterSpacing: '0.3em' }}>NO ORDERS FOUND</p>
-              </div>
-            </div>
-          )}
-
-          {active === "Add Funds" && (
-  <AddFunds />
-)}
+          {active === "My Orders" && <MyOrders userId={user.id} />}
+          {active === "Add Funds" && <AddFunds />}
 
           {(active === "Refill" || active === "Tickets" || active === "Services") && (
             <div className="flex flex-col items-center justify-center py-32">
