@@ -36,6 +36,101 @@ const navItems = [
   { label: "Services", icon: LayoutGrid },
 ];
 
+function AddFunds() {
+  const [phone, setPhone] = useState("");
+  const [amount, setAmount] = useState(500);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handlePayment = async () => {
+    if (!phone || amount < 100) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, phone: `237${phone}`, currency: "XAF" }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setSuccess(true);
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div>
+      <div className="mb-10">
+        <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ TOP UP BALANCE ◈</p>
+        <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>ADD FUNDS</h2>
+      </div>
+
+      {success ? (
+        <div className="max-w-sm p-8 text-center" style={{ border: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.03)' }}>
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ border: '1px solid rgba(0,255,255,0.3)', boxShadow: '0 0 30px rgba(0,255,255,0.2)' }}>
+            <span style={{ color: '#00ffff', fontSize: '24px' }}>✓</span>
+          </div>
+          <p className="font-black mb-2" style={{ fontFamily: "'Orbitron', sans-serif", color: '#00ffff', fontSize: '14px', letterSpacing: '0.2em' }}>PAYMENT INITIATED</p>
+          <p className="text-xs" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>Check your phone and approve the Mobile Money request. Your balance will update shortly.</p>
+        </div>
+      ) : (
+        <div className="max-w-sm space-y-4">
+          <div className="p-5" style={{ border: '1px solid rgba(0,255,255,0.1)', background: 'rgba(0,255,255,0.02)' }}>
+            <p className="text-xs tracking-wider" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)' }}>
+              Enter your MTN or Orange Money number and the amount you want to add. A payment request will be sent to your phone.
+            </p>
+          </div>
+
+          {error && (
+            <div className="px-4 py-3 text-xs" style={{ border: '1px solid rgba(255,0,0,0.2)', background: 'rgba(255,0,0,0.05)', fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,100,100,0.8)', letterSpacing: '0.1em' }}>
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-xs tracking-widest mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em' }}>PHONE NUMBER</label>
+            <div className="flex items-center" style={{ border: '1px solid rgba(0,255,255,0.2)' }}>
+              <span className="px-3 py-3 text-sm" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.6)', borderRight: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.05)' }}>+237</span>
+              <input type="tel" placeholder="6XXXXXXXX" value={phone} onChange={e => setPhone(e.target.value)}
+                className="flex-1 bg-transparent text-sm outline-none text-white placeholder-gray-700 px-4 py-3"
+                style={{ fontFamily: "'Rajdhani', sans-serif" }} />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs tracking-widest mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em' }}>AMOUNT (XAF)</label>
+            <input type="number" min={100} value={amount} onChange={e => setAmount(Number(e.target.value))}
+              className="w-full bg-transparent text-sm outline-none text-white px-4 py-3"
+              style={{ border: '1px solid rgba(0,255,255,0.2)', fontFamily: "'Rajdhani', sans-serif" }} />
+            <div className="flex gap-2 mt-2">
+              {[500, 1000, 2000, 5000].map(a => (
+                <button key={a} onClick={() => setAmount(a)}
+                  className="flex-1 py-2 text-xs tracking-widest transition-all"
+                  style={{ border: `1px solid ${amount === a ? 'rgba(0,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`, background: amount === a ? 'rgba(0,255,255,0.08)' : 'transparent', fontFamily: "'Rajdhani', sans-serif", color: amount === a ? '#00ffff' : 'rgba(255,255,255,0.3)' }}>
+                  {a.toLocaleString()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={handlePayment} disabled={loading}
+            className="w-full py-4 font-black text-xs tracking-widest transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3"
+            style={{ fontFamily: "'Orbitron', sans-serif", background: 'linear-gradient(135deg, rgba(139,0,255,0.8), rgba(0,255,255,0.8))', boxShadow: '0 0 30px rgba(0,255,255,0.15)', letterSpacing: '0.2em' }}>
+            {loading ? "PROCESSING..." : "PAY WITH MOBILE MONEY"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -356,28 +451,8 @@ export default function Dashboard() {
           )}
 
           {active === "Add Funds" && (
-            <div>
-              <div className="mb-10">
-                <p className="text-xs mb-2" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(0,255,255,0.5)', letterSpacing: '0.4em' }}>◈ TOP UP BALANCE ◈</p>
-                <h2 className="font-black" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 'clamp(1.2rem, 3vw, 2rem)', letterSpacing: '0.1em' }}>ADD FUNDS</h2>
-              </div>
-              <div className="max-w-sm p-8" style={{ border: '1px solid rgba(0,255,255,0.1)', background: 'rgba(0,255,255,0.02)' }}>
-                <p className="text-sm mb-6 leading-relaxed" style={{ fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255,255,255,0.4)', letterSpacing: '0.05em' }}>
-                  Fund your account via MTN Mobile Money or Orange Money.
-                </p>
-                <div className="space-y-3">
-                  <div className="py-4 px-5 text-xs tracking-widest flex items-center justify-between" style={{ border: '1px solid rgba(255,200,0,0.3)', background: 'rgba(255,200,0,0.03)', fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,200,0,0.7)' }}>
-                    <span>MTN MOBILE MONEY</span>
-                    <span style={{ color: 'rgba(255,200,0,0.4)' }}>SOON</span>
-                  </div>
-                  <div className="py-4 px-5 text-xs tracking-widest flex items-center justify-between" style={{ border: '1px solid rgba(255,100,0,0.3)', background: 'rgba(255,100,0,0.03)', fontFamily: "'Orbitron', sans-serif", color: 'rgba(255,100,0,0.7)' }}>
-                    <span>ORANGE MONEY</span>
-                    <span style={{ color: 'rgba(255,100,0,0.4)' }}>SOON</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+  <AddFunds />
+)}
 
           {(active === "Refill" || active === "Tickets" || active === "Services") && (
             <div className="flex flex-col items-center justify-center py-32">
