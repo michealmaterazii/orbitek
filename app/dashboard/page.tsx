@@ -357,7 +357,19 @@ export default function Dashboard() {
 
       {/* Mobile overlay */}
 {sidebarOpen && (
-  <div className="fixed inset-0 z-40 bg-black/60 md:hidden" onClick={() => setSidebarOpen(false)} style={{ pointerEvents: 'auto' }} />
+  <div 
+    className="fixed md:hidden"
+    style={{ 
+      position: 'fixed',
+      top: 0,
+      left: '240px',
+      right: 0,
+      bottom: 0,
+      zIndex: 40,
+      background: 'rgba(0,0,0,0.6)'
+    }} 
+    onClick={() => setSidebarOpen(false)} 
+  />
 )}
 
       <div className="flex h-screen overflow-hidden relative z-10">
