@@ -363,9 +363,8 @@ export default function Dashboard() {
       <div className="flex h-screen overflow-hidden relative z-10">
 
         {/* Sidebar */}
-         <aside className={`fixed md:relative top-0 left-0 h-full z-50 flex flex-col transition-transform duration-300 w-64 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`} onClick={e => e.stopPropagation()}
-          style={{ background: 'rgba(2,2,15,0.98)', borderRight: '1px solid rgba(0,255,255,0.08)', backdropFilter: 'blur(20px)', minWidth: '240px', maxWidth: '240px' }}>
-
+         <aside className={`fixed md:relative top-0 left-0 h-full z-50 flex flex-col transition-transform duration-300 w-64 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+  style={{ background: 'rgba(2,2,15,0.98)', borderRight: '1px solid rgba(0,255,255,0.08)', backdropFilter: 'blur(20px)', minWidth: '240px', maxWidth: '240px' }}>
           <div className="flex items-center gap-3 px-4 py-5" style={{ borderBottom: '1px solid rgba(0,255,255,0.08)' }}>
             <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ border: '1px solid rgba(0,255,255,0.5)', boxShadow: '0 0 15px rgba(0,255,255,0.2)' }}>
               <Wifi size={14} className="text-cyan-400" />
