@@ -20,14 +20,15 @@ export default function AdminPanel() {
       setUser(data.user);
 
       // Check if admin
-      const { data: adminData } = await supabase
-        .from("admins")
-        .select("id")
-        .eq("id", data.user.id)
-        .single();
+      const { data: adminData, error: adminError } = await supabase
+  .from("admins")
+  .select("id")
+  .eq("id", data.user.id)
+  .single();
 
-      if (!adminData) { window.location.href = "/dashboard"; return; }
-      setIsAdmin(true);
+console.log("Admin check:", adminData, adminError);
+
+if (!adminData) { window.location.href = "/dashboard"; return; }
 
       // Fetch orders
       const { data: ordersData } = await supabase
