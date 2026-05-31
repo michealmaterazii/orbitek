@@ -357,13 +357,13 @@ export default function Dashboard() {
 
       {/* Mobile overlay */}
 {sidebarOpen && (
-  <div className="fixed inset-0 z-30 bg-black/60 md:hidden" onClick={() => setSidebarOpen(false)} />
+  <div className="fixed inset-0 md:hidden" style={{ zIndex: 35 }} onClick={() => setSidebarOpen(false)} />
 )}
 
       <div className="flex h-screen overflow-hidden relative z-10">
 
         {/* Sidebar */}
-         <aside className={`fixed md:relative top-0 left-0 h-full z-40 flex flex-col transition-transform duration-300 w-64 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`} onClick={e => e.stopPropagation()}
+         <aside className={`fixed md:relative top-0 left-0 h-full z-50 flex flex-col...`}
           style={{ background: 'rgba(2,2,15,0.98)', borderRight: '1px solid rgba(0,255,255,0.08)', backdropFilter: 'blur(20px)', minWidth: '240px', maxWidth: '240px' }}>
 
           <div className="flex items-center gap-3 px-4 py-5" style={{ borderBottom: '1px solid rgba(0,255,255,0.08)' }}>
