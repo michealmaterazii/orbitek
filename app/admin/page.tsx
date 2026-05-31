@@ -13,21 +13,41 @@ export default function AdminPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) { window.location.href = "/login"; return; }
-      if (!ADMIN_IDS.includes(data.user.id)) { window.location.href = "/dashboard"; return; }
-      setUser(data.user);
+  const init = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) { window.location.href = "/login"; return; }
+    setUser(data.user);
 
-      const { data: ordersData } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setOrders(ordersData || []);
-      setLoading(false);
-    };
-    init();
-  }, []);
+    const { data: adminData } = await supabase
+      .from("admins")
+      .select("id")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (!adminData) {
+      window.location.href = "/dashboard";
+      return;
+    }
+
+    setIsAdmin(true);
+
+    const { data: ordersData } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setOrders(ordersData || []);
+
+    const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
+    setStats({
+      totalOrders: (ordersData || []).length,
+      totalUsers: 0,
+      pendingOrders: pending,
+    });
+
+    setLoading(false);
+  };
+  init();
+}, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
