@@ -13,41 +13,37 @@ export default function AdminPanel() {
   const [stats, setStats] = useState({ totalOrders: 0, totalUsers: 0, pendingOrders: 0 });
 
   useEffect(() => {
-    const init = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) { window.location.href = "/login"; return; }
-      setUser(data.user);
+  const init = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) { window.location.href = "/login"; return; }
+    setUser(data.user);
 
-      const { data: adminData } = await supabase
-        .from("admins")
-        .select("id")
-        .eq("id", data.user.id)
-        .maybeSingle();
+    // Simple email-based admin check
+    const adminEmails = ["michealenow2000@gmail.com"];
+    if (!adminEmails.includes(data.user.email || "")) {
+      window.location.href = "/dashboard";
+      return;
+    }
 
-      if (!adminData) {
-        window.location.href = "/dashboard";
-        return;
-      }
+    setIsAdmin(true);
 
-      setIsAdmin(true);
+    const { data: ordersData } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setOrders(ordersData || []);
 
-      const { data: ordersData } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setOrders(ordersData || []);
+    const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
+    setStats({
+      totalOrders: (ordersData || []).length,
+      totalUsers: 0,
+      pendingOrders: pending,
+    });
 
-      const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
-      setStats({
-        totalOrders: (ordersData || []).length,
-        totalUsers: 0,
-        pendingOrders: pending,
-      });
-
-      setLoading(false);
-    };
-    init();
-  }, []);
+    setLoading(false);
+  };
+  init();
+}, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
