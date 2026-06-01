@@ -60,12 +60,12 @@ export default function AdminPanel() {
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
   };
 
-  if (loading) return (
-    <div className="min-h-screen bg-[#010108] flex items-center justify-center">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600&display=swap');`}</style>
-      <div style={{ fontFamily: "'Orbitron', sans-serif", color: '#ff4444', fontSize: '12px', letterSpacing: '0.3em' }}>LOADING...</div>
-    </div>
-  );
+   if (loading || !isAdmin) return (
+  <div className="min-h-screen bg-[#010108] flex items-center justify-center">
+    <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap');`}</style>
+    <div style={{ fontFamily: "'Orbitron', sans-serif", color: '#ff4444', fontSize: '12px', letterSpacing: '0.3em' }}>LOADING...</div>
+  </div>
+);
 
   if (!isAdmin) return null;
 
