@@ -14,33 +14,38 @@ export default function AdminPanel() {
 
   useEffect(() => {
   const init = async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) { window.location.href = "/login"; return; }
-    setUser(data.user);
+    try {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) { window.location.href = "/login"; return; }
+      setUser(data.user);
 
-    // Simple email-based admin check
-    const adminEmails = ["michealenow2000@gmail.com"];
-    if (!adminEmails.includes(data.user.email || "")) {
-      window.location.href = "/dashboard";
-      return;
+      const adminEmails = ["michealenow2000@gmail.com"];
+      if (!adminEmails.includes(data.user.email || "")) {
+        window.location.href = "/dashboard";
+        return;
+      }
+
+      setIsAdmin(true);
+      setLoading(false);
+
+      // Fetch orders after setting admin and loading
+      const { data: ordersData } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      setOrders(ordersData || []);
+      const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
+      setStats({
+        totalOrders: (ordersData || []).length,
+        totalUsers: 0,
+        pendingOrders: pending,
+      });
+
+    } catch (err) {
+      console.error("Admin init error:", err);
+      setLoading(false);
     }
-
-    setIsAdmin(true);
-
-    const { data: ordersData } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setOrders(ordersData || []);
-
-    const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
-    setStats({
-      totalOrders: (ordersData || []).length,
-      totalUsers: 0,
-      pendingOrders: pending,
-    });
-
-    setLoading(false);
   };
   init();
 }, []);
