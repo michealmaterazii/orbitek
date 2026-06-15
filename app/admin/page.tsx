@@ -21,10 +21,12 @@ export default function AdminPanel() {
       return;
     }
 
-    const email = session.user.email || "";
+    const email = (session.user.email || "").toLowerCase().trim();
     setUser(session.user);
 
-    if (!ADMIN_EMAILS.includes(email)) {
+    const normalizedAdmins = ADMIN_EMAILS.map((e) => e.toLowerCase().trim());
+
+    if (!normalizedAdmins.includes(email)) {
       window.location.href = "/dashboard";
       return;
     }
