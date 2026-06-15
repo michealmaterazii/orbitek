@@ -26,7 +26,13 @@ export default function AdminPanel() {
 
     const normalizedAdmins = ADMIN_EMAILS.map((e) => e.toLowerCase().trim());
 
+    // DEBUG: log session and admin check to help diagnose unexpected redirects
+    console.log("[admin-check] session:", session);
+    console.log("[admin-check] email:", email);
+    console.log("[admin-check] ADMIN_EMAILS:", normalizedAdmins);
+
     if (!normalizedAdmins.includes(email)) {
+      console.warn("[admin-check] email not in admin list, redirecting to /dashboard");
       window.location.href = "/dashboard";
       return;
     }
