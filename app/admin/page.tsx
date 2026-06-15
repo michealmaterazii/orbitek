@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Users, ShoppingBag, DollarSign, LogOut, Wifi, Menu, X } from "lucide-react";
 
-const ADMIN_EMAILS = ["michealenow2000@gmail.com"];
+const ADMIN_EMAILS = [
+  "michealenow2000@gmail.com",
+  "michealenow2000@gmail.com",
+  "michealenow2000@gmail.com",
+  "michealamaterazii@gmail.com",
+];
 
 export default function AdminPanel() {
   const [user, setUser] = useState<any>(null);
