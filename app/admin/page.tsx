@@ -3,12 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Users, ShoppingBag, DollarSign, LogOut, Wifi, Menu, X } from "lucide-react";
 
-const ADMIN_EMAILS = [
-  "michealenow2000@gmail.com",
-  "michealenow2000@gmail.com",
-  "michealenow2000@gmail.com",
-  "michealamaterazii@gmail.com",
-];
+const ADMIN_EMAILS = ["michealenow2000@gmail.com", "michealmaterazii@gmail.com"];
 
 export default function AdminPanel() {
   const [user, setUser] = useState<any>(null);
@@ -31,13 +26,7 @@ export default function AdminPanel() {
 
     const normalizedAdmins = ADMIN_EMAILS.map((e) => e.toLowerCase().trim());
 
-    // DEBUG: log session and admin check to help diagnose unexpected redirects
-    console.log("[admin-check] session:", session);
-    console.log("[admin-check] email:", email);
-    console.log("[admin-check] ADMIN_EMAILS:", normalizedAdmins);
-
     if (!normalizedAdmins.includes(email)) {
-      console.warn("[admin-check] email not in admin list, redirecting to /dashboard");
       window.location.href = "/dashboard";
       return;
     }
