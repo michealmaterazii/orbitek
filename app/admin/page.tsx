@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Users, ShoppingBag, DollarSign, LogOut, Wifi, Menu, X } from "lucide-react";
 
+const ADMIN_EMAILS = ["michealenow2000@gmail.com"];
+
 export default function AdminPanel() {
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -10,45 +12,47 @@ export default function AdminPanel() {
   const [active, setActive] = useState("Overview");
   const [orders, setOrders] = useState<any[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [stats, setStats] = useState({ totalOrders: 0, totalUsers: 0, pendingOrders: 0 });
+  const [stats, setStats] = useState({ totalOrders: 0, pendingOrders: 0 });
 
   useEffect(() => {
-  const init = async () => {
-    try {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) { window.location.href = "/login"; return; }
-      setUser(data.user);
+    const init = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
 
-      const adminEmails = ["michealenow2000@gmail.com"];
-      if (!adminEmails.includes(data.user.email || "")) {
-        window.location.href = "/dashboard";
-        return;
+        if (!user) {
+          window.location.href = "/login";
+          return;
+        }
+
+        setUser(user);
+
+        if (!ADMIN_EMAILS.includes(user.email || "")) {
+          window.location.href = "/dashboard";
+          return;
+        }
+
+        setIsAdmin(true);
+
+        const { data: ordersData } = await supabase
+          .from("orders")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        const o = ordersData || [];
+        setOrders(o);
+        setStats({
+          totalOrders: o.length,
+          pendingOrders: o.filter((x: any) => x.status === "pending").length,
+        });
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-
-      setIsAdmin(true);
-      setLoading(false);
-
-      // Fetch orders after setting admin and loading
-      const { data: ordersData } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      setOrders(ordersData || []);
-      const pending = (ordersData || []).filter((o: any) => o.status === "pending").length;
-      setStats({
-        totalOrders: (ordersData || []).length,
-        totalUsers: 0,
-        pendingOrders: pending,
-      });
-
-    } catch (err) {
-      console.error("Admin init error:", err);
-      setLoading(false);
-    }
-  };
-  init();
-}, []);
+    };
+    init();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -60,14 +64,19 @@ export default function AdminPanel() {
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
   };
 
-   if (loading || !isAdmin) return (
-  <div className="min-h-screen bg-[#010108] flex items-center justify-center">
-    <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap');`}</style>
-    <div style={{ fontFamily: "'Orbitron', sans-serif", color: '#ff4444', fontSize: '12px', letterSpacing: '0.3em' }}>LOADING...</div>
-  </div>
-);
+  if (loading) return (
+    <div className="min-h-screen bg-[#010108] flex items-center justify-center">
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap');`}</style>
+      <div style={{ fontFamily: "'Orbitron', sans-serif", color: '#ff4444', fontSize: '12px', letterSpacing: '0.3em' }}>LOADING...</div>
+    </div>
+  );
 
-  if (!isAdmin) return null;
+  if (!isAdmin) return (
+    <div className="min-h-screen bg-[#010108] flex items-center justify-center">
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap');`}</style>
+      <div style={{ fontFamily: "'Orbitron', sans-serif", color: '#ff4444', fontSize: '12px', letterSpacing: '0.3em' }}>ACCESS DENIED</div>
+    </div>
+  );
 
   const navItems = [
     { label: "Overview", icon: DollarSign },
@@ -91,7 +100,6 @@ export default function AdminPanel() {
 
       <div className="flex h-screen overflow-hidden relative z-10">
 
-        {/* Sidebar */}
         <aside className={`fixed md:relative top-0 left-0 h-full z-50 flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
           style={{ background: 'rgba(2,2,15,0.98)', borderRight: '1px solid rgba(255,0,0,0.1)', backdropFilter: 'blur(20px)', minWidth: '240px', maxWidth: '240px' }}>
 
@@ -142,7 +150,6 @@ export default function AdminPanel() {
           </button>
         </aside>
 
-        {/* Main */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
           <header className="flex items-center justify-between px-4 md:px-6 py-4 shrink-0"
@@ -162,7 +169,6 @@ export default function AdminPanel() {
 
           <div className="flex-1 overflow-y-auto p-4 md:p-6">
 
-            {/* OVERVIEW */}
             {active === "Overview" && (
               <div>
                 <div className="mb-8">
@@ -207,7 +213,6 @@ export default function AdminPanel() {
               </div>
             )}
 
-            {/* ORDERS */}
             {active === "Orders" && (
               <div>
                 <div className="mb-8">
@@ -252,7 +257,6 @@ export default function AdminPanel() {
               </div>
             )}
 
-            {/* USERS */}
             {active === "Users" && (
               <div>
                 <div className="mb-8">
