@@ -15,44 +15,37 @@ export default function AdminPanel() {
   const [stats, setStats] = useState({ totalOrders: 0, pendingOrders: 0 });
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session) {
+      window.location.href = "/login";
+      return;
+    }
 
-        if (!user) {
-          window.location.href = "/login";
-          return;
-        }
+    const email = session.user.email || "";
+    setUser(session.user);
 
-        setUser(user);
+    if (!ADMIN_EMAILS.includes(email)) {
+      window.location.href = "/dashboard";
+      return;
+    }
 
-        if (!ADMIN_EMAILS.includes(user.email || "")) {
-          window.location.href = "/dashboard";
-          return;
-        }
+    setIsAdmin(true);
 
-        setIsAdmin(true);
-
-        const { data: ordersData } = await supabase
-          .from("orders")
-          .select("*")
-          .order("created_at", { ascending: false });
-
+    supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data: ordersData }) => {
         const o = ordersData || [];
         setOrders(o);
         setStats({
           totalOrders: o.length,
           pendingOrders: o.filter((x: any) => x.status === "pending").length,
         });
-
-      } catch (err) {
-        console.error(err);
-      } finally {
         setLoading(false);
-      }
-    };
-    init();
-  }, []);
+      });
+  });
+}, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
